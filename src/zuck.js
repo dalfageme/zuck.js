@@ -311,7 +311,10 @@
                       data-time="${get(itemData, 'time')}"
                       data-type="${get(itemData, 'type')}"
                       data-length="${get(itemData, 'length')}">
-                    <img loading="auto" src="${get(itemData, 'preview')}" />
+                    ${ get(itemData, 'type') !== 'html' ? 
+                      `<img loading="auto" src="${get(itemData, 'preview')}" />` : ''
+                    }
+                    ${get(itemData, 'html')}
                   </a>`;
         },
 
@@ -366,11 +369,15 @@
                     class="item ${get(item, 'seen') === true ? 'seen' : ''} ${currentIndex === index ? 'active' : ''}"
                     data-time="${get(item, 'time')}" data-type="${get(item, 'type')}" data-index="${index}" data-item-id="${get(item, 'id')}">
                     ${
-                      get(item, 'type') === 'video' 
-                      ? `<video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
-                        <b class="tip muted">${option('language', 'unmute')}</b>` 
-                      : `<img loading="auto" class="media" src="${get(item, 'src')}" ${get(item, 'type')} />
-                    `}
+                      get(item, 'type') === 'video' ?
+                        `<video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
+                          <b class="tip muted">${option('language', 'unmute')}</b>` : ''
+                    }
+                    ${
+                      get(item, 'type') === 'photo' ?
+                        `<img loading="auto" class="media" src="${get(item, 'src')}" ${get(item, 'type')} />` : ''
+                    }
+                    ${ get(item, 'type') === 'html' ? get(item, 'html') : '' }
 
                     ${
                       get(item, 'link') 
@@ -982,7 +989,8 @@
             time: a.getAttribute('data-time'),
             link: a.getAttribute('data-link'),
             linkText: a.getAttribute('data-linkText'),
-            preview: img.getAttribute('src')
+            preview: img.getAttribute('src'),
+            html: a.innerHTML,
           });
         });
 
